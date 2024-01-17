@@ -67,5 +67,16 @@ public class UserController {
 		return new ResponseEntity<>(userList, HttpStatus.OK);
 
 	}
+	
+	@GetMapping(value = "/v1/allusers")
+	public ResponseEntity<List<UserResponse>> getAllUsers() {
+
+		List<UserResponse> allUsers = userService.getAllUsers();
+		
+		return new ResponseEntity<>(allUsers, HttpStatus.OK);
+
+	}
+	
+	
 
 }

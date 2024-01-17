@@ -1,16 +1,16 @@
 package com.ap.electric.exception;
 
-public class UserException  extends RuntimeException{
+public class UserNotFoundException  extends RuntimeException{
 
 	
 	private static final long serialVersionUID = -3054434138233551741L;
 	private String message;
 	
-	public UserException() {
+	public UserNotFoundException() {
 		// 
 	}
 
-	public UserException(String message) {
+	public UserNotFoundException(String message) {
 		super();
 		this.message = message;
 	}

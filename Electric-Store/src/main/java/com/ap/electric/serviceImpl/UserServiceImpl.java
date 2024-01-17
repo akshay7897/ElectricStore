@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.ap.electric.entity.User;
-import com.ap.electric.exception.UserException;
+import com.ap.electric.exception.UserNotFoundException;
 import com.ap.electric.helper.UserRequest;
 import com.ap.electric.helper.UserResponse;
 import com.ap.electric.repository.UserRepository;
@@ -37,24 +37,26 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserResponse updateUser(UserRequest userRequest, String userId)  {
-		User user=userRepository.findById(userId).orElseThrow(()->new UserException("user not found"));
+		User user=userRepository.findById(userId).orElseThrow(()->new UserNotFoundException("user not found"));
 	
-		if(null!=userRequest.getName() && "".equals(userRequest.getName()))
+		if (null != userRequest.getName() && !"".equals(userRequest.getName()))
 			user.setName(userRequest.getName());
 		
-		if(null!=userRequest.getEmail() && "".equals(userRequest.getEmail()))
+		if (null != userRequest.getEmail() && !"".equals(userRequest.getEmail()))
 			user.setEmail(userRequest.getEmail());
 		
-		if(null!=userRequest.getPassword() && "".equals(userRequest.getPassword()))
+		if (null != userRequest.getPassword() && !"".equals(userRequest.getPassword()))
 			user.setPassword(userRequest.getPassword());
-		
-		if(null!=userRequest.getGender() && "".equals(userRequest.getGender()))
+
+		if (null != userRequest.getGender() && !"".equals(userRequest.getGender()))
 			user.setGender(userRequest.getGender());
-		
-		if(null!=userRequest.getAbout() && "".equals(userRequest.getAbout()))
+
+		if (null != userRequest.getAbout() && !"".equals(userRequest.getAbout()))
 			user.setAbout(userRequest.getAbout());
 		
-		return entityToDto(user);
+		User savedUser = userRepository.save(user);
+		
+		return entityToDto(savedUser);
 	}
 
 	@Override
@@ -68,13 +70,13 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserResponse getUserById(String userId) {
-		User user=userRepository.findById(userId).orElseThrow(()->new UserException("user not found"));
+		User user=userRepository.findById(userId).orElseThrow(()->new UserNotFoundException("user not found"));
 		return entityToDto(user);
 	}
 
 	@Override
 	public UserResponse getUserByEmail(String email) {
-		User user=userRepository.findByEmail(email).orElseThrow(()->new UserException("User not found with email")); 
+		User user=userRepository.findByEmail(email).orElseThrow(()->new UserNotFoundException("User not found with email")); 
 		return entityToDto(user);
 	}
 
@@ -91,7 +93,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public  List<UserResponse> getByKeyword(String keyword) {
-		List<User> users= userRepository.findByNameContaining(keyword).orElseThrow(()->new UserException("User not found with that name ...!!!"));
+		List<User> users= userRepository.findByNameContaining(keyword).orElseThrow(()->new UserNotFoundException("User not found with that name ...!!!"));
 		List<UserResponse> userResponseList=new ArrayList<>();
 		for(User user:users) {
 			userResponseList.add(entityToDto(user));
