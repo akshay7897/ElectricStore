@@ -33,7 +33,7 @@ public class UserController {
 
 	}
 
-	@PutMapping(value = "/v1/{userId}/updateuser", consumes = "application/json", produces = "application/json")
+	@PutMapping(value = "/v1/{userId}/updateuser", consumes = {"application/json","application/xml"}, produces = "application/json")
 	public ResponseEntity<UserResponse> updateUser(@RequestBody UserRequest userRequest, @PathVariable String userId) {
 		UserResponse updateUser = userService.updateUser(userRequest, userId);
 		return new ResponseEntity<>(updateUser, HttpStatus.OK);
